@@ -8,7 +8,9 @@ import (
 
 // Represents a grouping of documents within the jServ database
 type Collection struct {
+	// Collection id and filename
 	Name string
+	// Pointers to Documents in memory
 	List []*Document
 }
 
@@ -20,6 +22,7 @@ func (c *Collection) New(name string) {
 	c.List = make([]*Document, 0)
 }
 
+// Reads an entire collection from MsgPack
 func (c *Collection) FromMsgPack(b []byte) bool {
 	//Generates map data from the file
 	var dat []map[string]interface{}
@@ -39,6 +42,7 @@ func (c *Collection) FromMsgPack(b []byte) bool {
 	}
 }
 
+// Converts the collection in full to MsgPack
 func (c Collection) ToMsgPack() ([]byte, bool) {
 	var vals []Document
 	for _, d := range c.List {

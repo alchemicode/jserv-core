@@ -4,9 +4,12 @@ import "encoding/json"
 
 //Represents a server response after receiving and processing HTTP requests
 type Response struct {
-	Status  string `json:"status"`
+	// Whether the http request executed successfully ("ok" or "error")
+	Status string `json:"status"`
+	// Message explaining the status
 	Message string `json:"message"`
-	Data    string `json:"data"`
+	// JSON data containing anything pertinent to explaining the status
+	Data string `json:"data"`
 }
 
 // Constructs a response without the inclusion of JSON data

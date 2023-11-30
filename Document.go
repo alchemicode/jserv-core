@@ -9,9 +9,11 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
-// Represents a grouping of data under a unique identifier (_id) within the jServ database
+// Represents a grouping of data within the jServ database
 type Document struct {
-	Id   string                 `json:"_id" msgpack:"_id" csv:"_id" toml:"_id" yaml:"_id"`
+	// Unique identifier for a document within a collection
+	Id string `json:"_id" msgpack:"_id" csv:"_id" toml:"_id" yaml:"_id"`
+	// Set of data values
 	Data map[string]interface{} `json:"data" msgpack:"data" csv:"data" toml:"data" yaml:"data,flow"`
 }
 
@@ -31,7 +33,7 @@ func (d *Document) WithData(id string, data map[string]interface{}) {
 
 // Values Constructor
 // Creates a Document with a given id and a list of Value objects
-func (d *Document) WithValues(id string, values []Value) {
+func (d *Document) WithValues(id string, values []Attribute) {
 	d.Id = id
 	d.Data = make(map[string]interface{})
 	for _, v := range values {
@@ -40,22 +42,31 @@ func (d *Document) WithValues(id string, values []Value) {
 }
 
 // JSON Constructor
-// Creates a Document from given Json string
+// Creates a Document JSON data
 func (d *Document) FromJson(s string) {
 	if err := json.Unmarshal([]byte(s), d); err != nil {
 		panic(err)
 	}
 }
+
+// MsgPack Constructor
+// Creates a Document from MsgPack data
 func (d *Document) FromMsgPack(s string) {
 	if err := msg.Unmarshal([]byte(s), d); err != nil {
 		panic(err)
 	}
 }
+
+// TOML Constructor
+// Creates a Document from TOML data
 func (d *Document) FromToml(s string) {
 	if err := toml.Unmarshal([]byte(s), d); err != nil {
 		panic(err)
 	}
 }
+
+// YAML Constructor
+// Creates a Document from given YAML data
 func (d *Document) FromYaml(s string) {
 	if err := yaml.Unmarshal([]byte(s), d); err != nil {
 		panic(err)
@@ -70,22 +81,28 @@ func (d Document) ToMap() map[string]interface{} {
 	return m
 }
 
-// Returns the Document in JSON format
-func (d Document) ToJson() string {
-	js, _ := json.Marshal(d)
-	return string(js)
-}
+// Returns the Document in MsgPack format
 func (d Document) ToMsgPack() string {
 	m, _ := msg.Marshal(d)
 	return string(m)
 }
+
+// Returns the Document in TOML format
 func (d Document) ToToml() string {
 	t, _ := json.Marshal(d)
 	return string(t)
 }
+
+// Returns the Document in YAML format
 func (d Document) ToYaml() string {
 	y, _ := json.Marshal(d)
 	return string(y)
+}
+
+// Returns the Document in JSON format
+func (d Document) ToJson() string {
+	js, _ := json.Marshal(d)
+	return string(js)
 }
 
 // Returns the Document as a string
