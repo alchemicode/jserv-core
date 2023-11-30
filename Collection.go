@@ -1,8 +1,6 @@
 package core
 
 import (
-	"fmt"
-
 	m "github.com/vmihailenco/msgpack/v5"
 )
 
@@ -14,9 +12,8 @@ type Collection struct {
 	List []*Document
 }
 
-// Named Constructor Constructor
+// Named Constructor
 // Creates an empty Collection object with just a name
-// and reads its file
 func (c *Collection) New(name string) {
 	c.Name = name
 	c.List = make([]*Document, 0)
@@ -27,7 +24,6 @@ func (c *Collection) FromMsgPack(b []byte) bool {
 	//Generates map data from the file
 	var dat []map[string]interface{}
 	if err := m.Unmarshal(b, &dat); err != nil {
-		fmt.Println("Error when generating data for " + c.Name + ".dat")
 		return false
 	} else {
 		//Reads each object in the generated data from the file

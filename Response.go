@@ -27,12 +27,12 @@ func (r *Response) WithData(status string, message string, data string) {
 }
 
 //Converts the JSON string field Data to a map
-func (r Response) DataToMap() map[string]interface{} {
+func (r Response) DataToMap() (map[string]interface{}, error) {
 	var data map[string]interface{}
 	if err := json.Unmarshal([]byte(r.Data), &data); err != nil {
-		panic(err)
+		return map[string]interface{}{}, err
 	}
-	return data
+	return data, nil
 }
 
 //Converts the Response object into JSON
@@ -40,7 +40,12 @@ func (r Response) ToJson() string {
 	data := make(map[string]interface{})
 	data["status"] = r.Status
 	data["message"] = r.Message
-	data["data"] = r.DataToMap()
+	if r.Data != "" {
+		dat, err := r.DataToMap()
+		if err != nil {
+			data["data"] = dat
+		}
+	}
 	js, _ := json.Marshal(data)
 	return string(js)
 }
