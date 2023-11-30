@@ -14,7 +14,7 @@
 
 <hr>
 
-<h3><a align="center" href="https://github.com/alchemicode/jServCore">Legacy + commit history</a></h3>
+<h3 align="center"><a href="https://github.com/alchemicode/jServCore">Legacy + commit history</a></h3>
 
 <p align="center">
     Core data structure of jServ, used for scripting.
