@@ -2,6 +2,9 @@ module github.com/alchemicode/jserv-core
 
 go 1.21
 
+retract (
+	v1.0.1
+)
 
 require (
 	github.com/pelletier/go-toml/v2 v2.1.0

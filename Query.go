@@ -8,6 +8,8 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
+var ALL_QUERY = Query{Has: []string{"_id"}}
+
 // Represents a series of expressions that fetch documents meeting its conditions from the jServ database
 type Query struct {
 	// Collections to be queried
