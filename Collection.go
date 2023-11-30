@@ -1,7 +1,7 @@
 package core
 
 import (
-	m "github.com/vmihailenco/msgpack/v5"
+	msg "github.com/vmihailenco/msgpack/v5"
 )
 
 // Represents a grouping of documents within the jServ database
@@ -22,16 +22,17 @@ func (c *Collection) New(name string) {
 // Reads an entire collection from MsgPack
 func (c *Collection) FromMsgPack(b []byte) bool {
 	//Generates map data from the file
-	var dat []map[string]interface{}
-	if err := m.Unmarshal(b, &dat); err != nil {
+	var dat []map[interface{}]interface{}
+	if err := msg.Unmarshal(b, &dat); err != nil {
 		return false
 	} else {
-		//Reads each object in the generated data from the file
+		//Reads each document in the generated data from the file
 		//and populates the collection's list
-		for i := 0; i < len(dat); i++ {
-			obj := new(Document)
-			obj.WithData(dat[i]["id"].(string), dat[i]["data"].(map[string]interface{}))
-			c.List = append(c.List, obj)
+		for _, m := range dat {
+			doc := new(Document)
+			doc.Id = m["_id"].(string)
+			doc.Data = m["data"].(map[string]interface{})
+			c.List = append(c.List, doc)
 		}
 		//Channel returns true if the read was successful
 		return true
@@ -44,7 +45,7 @@ func (c Collection) ToMsgPack() ([]byte, bool) {
 	for _, d := range c.List {
 		vals = append(vals, *d)
 	}
-	bytes, err := m.Marshal(vals)
+	bytes, err := msg.Marshal(vals)
 	return bytes, (err == nil)
 
 }
