@@ -8,12 +8,10 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
-var ALL_QUERY = Query{Has: []string{"_id"}}
-
 // Represents a series of expressions that fetch documents meeting its conditions from the jServ database
 type Query struct {
 	// Collections to be queried
-	Collection []string `json:"collection,omitempty" msgpack:"collection,omitempty" csv:"collection,omitempty" toml:"collection,omitempty" yaml:"collection,omitempty,flow"`
+	Collections []string `json:"collection,omitempty" msgpack:"collection,omitempty" csv:"collection,omitempty" toml:"collection,omitempty" yaml:"collection,omitempty,flow"`
 	// Attributes a document must have
 	Has []string `json:"has,omitempty" msgpack:"has,omitempty" csv:"has,omitempty" toml:"has,omitempty" yaml:"has,omitempty,flow"`
 	// Attributes that must be equal to a given value
@@ -30,6 +28,17 @@ type Query struct {
 	GreaterThan map[string]interface{} `json:"gt,omitempty" msgpack:"gt,omitempty" csv:"gt,omitempty" toml:"gt,omitempty" yaml:"gt,omitempty,flow"`
 	// Attributes that must be between two given values
 	Between map[string]interface{} `json:"between,omitempty" msgpack:"between,omitempty" csv:"between,omitempty" toml:"between,omitempty" yaml:"between,omitempty,flow"`
+}
+
+// Creates query that will return all documents in the db
+func (q *Query) AllQuery() {
+	q.Has = []string{"_id"}
+}
+
+// Creates query that will return all documents in the given collections
+func (q *Query) CollectionAllQuery(collections []string) {
+	q.Collections = collections
+	q.Has = []string{"_id"}
 }
 
 // Converts the Query into JSON
